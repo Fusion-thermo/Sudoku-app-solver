@@ -1,0 +1,1 @@
+Pyautogui is worse than Pynput, skips clicks without reason where Pynput doesn't.
