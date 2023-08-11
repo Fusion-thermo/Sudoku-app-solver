@@ -5,7 +5,7 @@ import numpy as np
 from time import sleep,time
 from pyomo.environ import ConcreteModel, Var, Objective, Constraint,ConstraintList, SolverFactory
 from pyomo.environ import Binary, RangeSet, PositiveIntegers
-import pyautogui
+import pyautogui #for absolutely no reason removing this breaks the program, the positioning doesn't go where it is supposed to go.
 from pynput.mouse import Button, Controller
 
 #path to the executable, because it's not on path
@@ -57,9 +57,21 @@ def identify_numbers(img,i,j,fichier=False):
                   [0,8,0,4,0,0,1,0,0],
                   [1,0,0,0,0,0,5,6,0],
                   [0,7,0,0,3,6,0,0,4]]) """
+
+def grab_taux_pixels(x1,y1,x2,y2, couleur):
+    im = ImageGrab.grab(bbox =(x1, y1, x2, y2))
+    #im.show()
+    px=im.load()
+    total=[]
+    for x in range(x2-x1):
+        for y in range(y2-y1):
+            if px[x,y] == couleur:
+                return False
+            #total.append(px[x,y])
+    return True
+    
 #parcourir tout le sudoku
 def lecture_sudoku():
-    sleep(3)
     print("LECTURE")
     debut=time()
     x0,y0=1019,413
@@ -68,9 +80,12 @@ def lecture_sudoku():
     lecture=[]
     for i in range(9):
         for j in range(9):
-            x1, y1 = x0+j*distance - cote, y0+i*distance - cote
-            x2, y2 = x0+j*distance + cote, y0+i*distance + cote
+            x1, y1 = int(x0+j*distance - cote), int(y0+i*distance - cote)
+            x2, y2 = int(x0+j*distance + cote), int(y0+i*distance + cote)
             im = ImageGrab.grab(bbox =(x1,y1,x2,y2))
+            vide=grab_taux_pixels(int(x0+j*distance - 15), int(y0+i*distance - 20),int(x0+j*distance + 15), int(y0+i*distance + 20),(68,68,68))
+            if vide:
+                continue
             #im.save("C:/Users/jeanb/OneDrive/Documents/Python/Applications mobiles avec scrpy/Sudoku/image grab/{}-{}.png".format(str(i),str(j)))
             #im.show()
             #im="C:/Users/jeanb/OneDrive/Documents/Python/Applications mobiles avec scrpy/Sudoku/image grab/{}-{}.png".format(str(i),str(j))
@@ -193,7 +208,6 @@ def input_solution(solution,liste_nombres):
     x0,y0=1019,413
     distance=788/9
     duree=0.5
-    #for again in range(2):#because some of them are missed on the first pass
     for i in range(9):
         for j in range(9):
             if (i+1,j+1,sol_numpy[i,j]) in liste_nombres:
@@ -212,9 +226,23 @@ def input_solution(solution,liste_nombres):
 
 
 #main
+compteur=0
 mouse = Controller()
-liste_nombres=lecture_sudoku()
-print(liste_nombres, len(liste_nombres))
-solution=SudokuFinder(liste_nombres)
-#PlotSudoku(solution)
-input_solution(solution,liste_nombres)
+sleep(3)
+while compteur<5:
+    compteur+=1
+    liste_nombres=lecture_sudoku()
+    print(liste_nombres, len(liste_nombres))
+    solution=SudokuFinder(liste_nombres)
+    #PlotSudoku(solution)
+    input_solution(solution,liste_nombres)
+    sleep(4)
+    mouse.position = (1365,1365)
+    sleep(0.5)
+    mouse.click(Button.left)
+    sleep(2)
+    mouse.position = (1365,1022)
+    sleep(0.5)
+    mouse.click(Button.left)
+    sleep(0.5)
+    mouse.position = (2248,735)
