@@ -207,7 +207,7 @@ def input_solution(solution,liste_nombres):
     pos_chiffres=[1023, 1109, 1195, 1281, 1367, 1453, 1539, 1625, 1711]
     x0,y0=1019,413
     distance=788/9
-    duree=0.5
+    duree=0.2
     for i in range(9):
         for j in range(9):
             if (i+1,j+1,sol_numpy[i,j]) in liste_nombres:
@@ -220,16 +220,13 @@ def input_solution(solution,liste_nombres):
             mouse.position = (pos_chiffres[int(sol_numpy[i,j]) - 1], 1475)
             sleep(duree)
             mouse.click(Button.left)
-            sleep(duree)
-    mouse.position = (pos_chiffres[int(sol_numpy[i,j]) - 1], 1475)
-    mouse.click(Button.left)
 
 
 #main
 compteur=0
 mouse = Controller()
 sleep(3)
-while compteur<5:
+while compteur<2:
     compteur+=1
     liste_nombres=lecture_sudoku()
     print(liste_nombres, len(liste_nombres))
@@ -238,11 +235,11 @@ while compteur<5:
     input_solution(solution,liste_nombres)
     sleep(4)
     mouse.position = (1365,1365)
-    sleep(0.5)
+    sleep(0.2)
     mouse.click(Button.left)
     sleep(2)
     mouse.position = (1365,1022)
-    sleep(0.5)
+    sleep(0.2)
     mouse.click(Button.left)
-    sleep(0.5)
+    sleep(0.2)
     mouse.position = (2248,735)
