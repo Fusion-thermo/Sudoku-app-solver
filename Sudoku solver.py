@@ -207,7 +207,7 @@ def input_solution(solution,liste_nombres):
     pos_chiffres=[1023, 1109, 1195, 1281, 1367, 1453, 1539, 1625, 1711]
     x0,y0=1019,413
     distance=788/9
-    duree=0.2
+    duree=0.1
     for i in range(9):
         for j in range(9):
             if (i+1,j+1,sol_numpy[i,j]) in liste_nombres:
@@ -225,21 +225,29 @@ def input_solution(solution,liste_nombres):
 #main
 compteur=0
 mouse = Controller()
-sleep(3)
-while compteur<2:
+sleep(2) #temps nécessaire pour changer de fenêtre
+while compteur<5:
     compteur+=1
     liste_nombres=lecture_sudoku()
     print(liste_nombres, len(liste_nombres))
     solution=SudokuFinder(liste_nombres)
     #PlotSudoku(solution)
     input_solution(solution,liste_nombres)
+    #nouvelle partie
     sleep(4)
     mouse.position = (1365,1365)
-    sleep(0.2)
+    sleep(0.1)
     mouse.click(Button.left)
     sleep(2)
-    mouse.position = (1365,1022)
-    sleep(0.2)
+    #choix de la difficulté
+    #mouse.position = (1185,889)#débutant
+    mouse.position = (1330,1015)#facile
+    #mouse.position = (1386,1155)#moyen
+    #mouse.position = (1349,1268)#difficile
+    #mouse.position = (1396,1393)#expert
+    sleep(0.1)
     mouse.click(Button.left)
-    sleep(0.2)
+    #bouge la souris pour qu'elle ne soit pas sur les chiffres
+    sleep(0.1)
     mouse.position = (2248,735)
+    sleep(1)#avant que la nouvelle partie ne démarre
